@@ -17,7 +17,7 @@ interface UseLocationsReturn {
 /**
  * Fetches all AFH locations from the API and manages paginated display.
  *
- * Loads up to 12 locations on mount, then exposes `loadMore` to reveal
+ * Loads all locations on mount, then exposes `loadMore` to reveal
  * additional results in increments of 4.
  *
  * @returns {UseLocationsReturn}
@@ -45,7 +45,7 @@ export function useLocations(): UseLocationsReturn {
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error(`Network error: ${res.status}`);
         const data: Location[] = await res.json();
-        if (!cancelled) setAll(data.slice(0, 12));
+        if (!cancelled) setAll(data);
       } catch (err) {
         if (!cancelled) setError(err instanceof Error ? err.message : 'Failed to load locations.');
       } finally {
