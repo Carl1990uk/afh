@@ -15,10 +15,11 @@ export function LocationCard({ location, index, isSelected, onClick }: Props) {
     <article
       className={`location-card${isSelected ? ' location-card--selected' : ''}`}
       style={{ '--card-index': index } as React.CSSProperties}
-      aria-label={`Office: ${name}`}
+      aria-label={`Office: ${name}${isSelected ? ' (selected)' : ''}`}
+      aria-current={isSelected || undefined}
       onClick={onClick}
       tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && onClick?.()}
+      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onClick?.())}
     >
       <div className='location-card__content'>
         <h2 className='location-card__name'>{name}</h2>

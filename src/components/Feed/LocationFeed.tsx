@@ -28,9 +28,9 @@ export function LocationFeed() {
   }
   return (
     <section className='feed' aria-label='Office locations'>
-      <LocationMap locations={all} selected={selected} onSelect={setSelected} />
+      <LocationMap locations={all} selected={selected} onSelect={setSelected} onClose={() => setSelected(null)} />
 
-      <p className='feed__count'>
+      <p className='feed__count' aria-live='polite' aria-atomic='true'>
         Showing <strong>{visibleCount}</strong> of <strong>{total}</strong> offices
       </p>
       <ul className='feed__grid' role='list'>

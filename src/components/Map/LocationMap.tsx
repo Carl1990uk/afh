@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useId } from 'react';
 import { MdClose, MdMap } from 'react-icons/md';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -46,14 +46,28 @@ interface Props {
   locations: Location[];
   selected: Location | null;
   onSelect: (location: Location) => void;
+  onClose?: () => void;
 }
 
-export function LocationMap({ locations, selected, onSelect }: Props) {
+export function LocationMap({ locations, selected, onSelect, onClose }: Props) {
   const [open, setOpen] = useState(false);
+  const fabRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const prevOpen = useRef(false);
+  const titleId = useId();
 
   useEffect(() => {
     if (selected) setOpen(true);
   }, [selected]);
+
+  useEffect(() => {
+    if (open) {
+      closeRef.current?.focus();
+    } else if (prevOpen.current) {
+      fabRef.current?.focus();
+    }
+    prevOpen.current = open;
+  }, [open]);
 
   const valid = locations.filter((l) => !isNaN(parseFloat(l.lat)) && !isNaN(parseFloat(l.lon)));
 
@@ -64,8 +78,18 @@ export function LocationMap({ locations, selected, onSelect }: Props) {
       {open && (
         <div className='map-panel'>
           <div className='map-panel__header'>
-            <span className='map-panel__title'>{selected ? selected.name : 'All Offices'}</span>
-            <button className='map-panel__close' onClick={() => setOpen(false)} aria-label='Close map'>
+            <span id={titleId} className='map-panel__title'>
+              {selected ? selected.name : 'All Offices'}
+            </span>
+            <button
+              ref={closeRef}
+              className='map-panel__close'
+              onClick={() => {
+                setOpen(false);
+                onClose?.();
+              }}
+              aria-label='Close map'
+            >
               <MdClose aria-hidden='true' />
             </button>
           </div>
@@ -91,7 +115,7 @@ export function LocationMap({ locations, selected, onSelect }: Props) {
         </div>
       )}
 
-      <button className='map-fab' onClick={() => setOpen((o) => !o)} aria-label={open ? 'Close map' : 'View map'}>
+      <button ref={fabRef} className='map-fab' onClick={() => setOpen((o) => !o)} aria-label={open ? 'Close map' : 'View map'}>
         <MdMap aria-hidden='true' />
         {open ? 'Close Map' : 'View Map'}
       </button>

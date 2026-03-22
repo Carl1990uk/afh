@@ -4,23 +4,38 @@
   flex-direction: column;
   background: var(--color-bg);
 }
-
- .app-header {
+.app-header {
   background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 0 15px -10px #000;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
 .app-header__inner {
-  max-width: 1200px;
+  max-width: 80rem;
   margin: 0 auto;
-  padding: 0 24px;
-  height: 64px;
+  padding: 0 1rem;
+  height: 5rem;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
+
+.app-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  text-decoration: none;
+}
+
+.app-header__logo {
+  padding: 0.5rem 0;
+  max-height: 5rem;
+  width: auto;
+}
+
 .app-title-bar {
   background: var(--color-brand);
   color: #fff;
