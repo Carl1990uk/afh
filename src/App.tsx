@@ -1,5 +1,5 @@
 import './App.css';
-import { LocationFeed } from './components/LocationFeed';
+import { LocationFeed } from './components/Feed/LocationFeed';
 
 function App() {
   return (

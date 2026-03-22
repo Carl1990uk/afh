@@ -1,7 +1,32 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 import { LocationFeed } from './LocationFeed';
-import type { Location } from './../types/location';
+import type { Location } from '../../types/location';
+
+// Mock Leaflet internals so LocationMap renders safely in jsdom
+vi.mock('react-leaflet', () => ({
+  MapContainer: ({ children }: { children: React.ReactNode }) => <div data-testid='map'>{children}</div>,
+  TileLayer: () => null,
+  Marker: ({ children, eventHandlers }: { children: React.ReactNode; eventHandlers?: { click?: () => void } }) => (
+    <div data-testid='marker' onClick={eventHandlers?.click}>
+      {children}
+    </div>
+  ),
+  Popup: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  useMap: () => ({ flyTo: vi.fn() }),
+}));
+
+vi.mock('leaflet', () => {
+  class Icon {
+    constructor() {}
+    static Default = class {
+      static mergeOptions() {}
+      prototype: object = {};
+    };
+  }
+  return { default: { Icon, icon: vi.fn() }, Icon };
+});
 
 const makeLocation = (n: number): Location => ({
   name: `Office ${n}`,
@@ -39,7 +64,8 @@ function mockFetchError(status = 500) {
 
 describe('LocationFeed', () => {
   it('shows a loading spinner while fetching', () => {
-    mockFetchSuccess(LOCATIONS);
+    // Never-resolving mock: no state update fires after the test exits
+    (fetch as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
     render(<LocationFeed />);
     expect(screen.getByRole('status', { name: 'Loading locations' })).toBeInTheDocument();
     expect(screen.getByText('Loading office locations…')).toBeInTheDocument();
@@ -50,6 +76,7 @@ describe('LocationFeed', () => {
     render(<LocationFeed />);
 
     await waitFor(() => expect(screen.queryByRole('status')).not.toBeInTheDocument());
+
     expect(screen.getByText('Office 1')).toBeInTheDocument();
     expect(screen.getByText('Office 4')).toBeInTheDocument();
     expect(screen.queryByText('Office 5')).not.toBeInTheDocument();
@@ -104,6 +131,38 @@ describe('LocationFeed', () => {
     const alert = screen.getByRole('alert');
     expect(alert).toBeInTheDocument();
     expect(alert).toHaveTextContent('Network error: 503');
+  });
+
+  it('selecting a card opens the map and shows the location name', async () => {
+    mockFetchSuccess(LOCATIONS);
+    render(<LocationFeed />);
+    await waitFor(() => expect(screen.queryByRole('status')).not.toBeInTheDocument());
+
+    await userEvent.click(screen.getByRole('article', { name: 'Office: Office 1' }));
+
+    expect(screen.getByText('Office 1', { selector: '.map-panel__title' })).toBeInTheDocument();
+  });
+
+  it('selecting a different card updates the map title', async () => {
+    mockFetchSuccess(LOCATIONS);
+    render(<LocationFeed />);
+    await waitFor(() => expect(screen.queryByRole('status')).not.toBeInTheDocument());
+
+    await userEvent.click(screen.getByRole('article', { name: 'Office: Office 1' }));
+    await userEvent.click(screen.getByRole('article', { name: 'Office: Office 2' }));
+
+    expect(screen.getByText('Office 2', { selector: '.map-panel__title' })).toBeInTheDocument();
+  });
+
+  it('applies the selected class to the clicked card', async () => {
+    mockFetchSuccess(LOCATIONS);
+    render(<LocationFeed />);
+    await waitFor(() => expect(screen.queryByRole('status')).not.toBeInTheDocument());
+
+    const card = screen.getByRole('article', { name: 'Office: Office 1' });
+    await userEvent.click(card);
+
+    expect(card).toHaveClass('location-card--selected');
   });
 
   it('shows no Load More when result count is within one page', async () => {

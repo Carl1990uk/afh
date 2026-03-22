@@ -41,7 +41,8 @@ function mockFetchError(status = 500) {
 
 describe('useLocations', () => {
   it('starts in a loading state', () => {
-    mockFetchSuccess(LOCATIONS);
+    // Never-resolving mock: no state update fires after the test exits
+    (fetch as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
     const { result } = renderHook(() => useLocations());
     expect(result.current.loading).toBe(true);
     expect(result.current.visible).toHaveLength(0);
@@ -61,7 +62,7 @@ describe('useLocations', () => {
     expect(result.current.error).toBeNull();
   });
 
-  it('sets an error message on a non-ok response', async () => {
+  it('sets an error message on a non ok response', async () => {
     mockFetchError(503);
     const { result } = renderHook(() => useLocations());
 
@@ -109,5 +110,26 @@ describe('useLocations', () => {
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.hasMore).toBe(false);
     expect(result.current.visible).toHaveLength(3);
+  });
+
+  it('loadMore is a no when hasMore is false', async () => {
+    mockFetchSuccess(LOCATIONS.slice(0, 3));
+    const { result } = renderHook(() => useLocations());
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    act(() => result.current.loadMore());
+    act(() => result.current.loadMore());
+
+    expect(result.current.visibleCount).toBe(3);
+    expect(result.current.hasMore).toBe(false);
+  });
+
+  it('cancels the in flight fetch on unmount', () => {
+    // Never-resolving mock keeps the fetch pending for the life of the test
+    (fetch as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
+    const { result, unmount } = renderHook(() => useLocations());
+    expect(result.current.loading).toBe(true);
+    // Cleanup (cancelled = true) must run without throwing
+    expect(() => unmount()).not.toThrow();
   });
 });

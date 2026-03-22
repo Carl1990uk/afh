@@ -11,6 +11,7 @@
 .feed__count strong {
   color: var(--color-heading);
 }
+
 .feed__grid {
   list-style: none;
   padding: 0;
@@ -31,6 +32,7 @@
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
 .feed__footer {
   display: flex;
   justify-content: center;
@@ -78,12 +80,14 @@
 .feed__load-more:active {
   transform: translateY(0);
 }
+
 .feed__end {
   text-align: center;
   margin-top: 2.5rem;
   font-size: 0.875rem;
   color: var(--color-text-subtle);
 }
+
 .feed__state {
   display: flex;
   flex-direction: column;

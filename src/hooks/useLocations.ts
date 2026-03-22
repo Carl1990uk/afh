@@ -5,6 +5,7 @@ const API_URL = '/api/v1/locations';
 const PAGE_SIZE = 4;
 
 interface UseLocationsReturn {
+  all: Location[];
   visible: Location[];
   total: number;
   visibleCount: number;
@@ -21,6 +22,7 @@ interface UseLocationsReturn {
  * additional results in increments of 4.
  *
  * @returns {UseLocationsReturn}
+ *   - `all`          — the full array of fetched locations
  *   - `visible`      — the currently displayed slice of locations
  *   - `total`        — total number of locations fetched
  *   - `visibleCount` — how many locations are currently shown
@@ -64,6 +66,7 @@ export function useLocations(): UseLocationsReturn {
   }, [all.length]);
 
   return {
+    all,
     visible: all.slice(0, visibleCount),
     total: all.length,
     visibleCount,

@@ -1,10 +1,14 @@
 import { MdArrowDownward, MdErrorOutline } from 'react-icons/md';
-import { useLocations } from '../hooks/useLocations';
-import { LocationCard } from './LocationCard';
+import { useLocations } from '../../hooks/useLocations';
+import { LocationCard } from '../Card/LocationCard';
 import './LocationFeed.css';
+import { LocationMap } from '../Map/LocationMap';
+import type { Location } from '../../types/location';
+import { useState } from 'react';
 
 export function LocationFeed() {
-  const { visible, total, visibleCount, loading, error, loadMore, hasMore } = useLocations();
+  const { visible, total, visibleCount, loading, error, loadMore, hasMore, all } = useLocations();
+  const [selected, setSelected] = useState<Location | null>(null);
   if (loading) {
     return (
       <div className='feed__state'>
@@ -24,13 +28,15 @@ export function LocationFeed() {
   }
   return (
     <section className='feed' aria-label='Office locations'>
+      <LocationMap locations={all} selected={selected} onSelect={setSelected} />
+
       <p className='feed__count'>
         Showing <strong>{visibleCount}</strong> of <strong>{total}</strong> offices
       </p>
       <ul className='feed__grid' role='list'>
         {visible.map((loc, i) => (
           <li key={`${loc.name}-${i}`} role='listitem'>
-            <LocationCard location={loc} index={i} />
+            <LocationCard location={loc} index={i} isSelected={selected?.name === loc.name} onClick={() => setSelected(loc)} />
           </li>
         ))}
       </ul>
