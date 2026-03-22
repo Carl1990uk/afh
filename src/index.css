@@ -12,8 +12,12 @@ body {
 :root {
   --sans: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --color-brand:       #6a005d;
+  --color-brand-dark:  #56004b;
   --color-brand-light: #8b0079;
   --color-brand-bg:    #f5e6f3;
+  --color-accent:      #73dfab;
+  --color-accent-dark: #50c994;
+
   --color-heading:     #4a4f54;
   --color-text:        #646464;
   --color-text-muted:  #7a7a7a;

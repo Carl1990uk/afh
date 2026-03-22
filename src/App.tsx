@@ -11,12 +11,14 @@ function App() {
           </a>
         </div>
       </header>
-      <main className='app-main'>
+      <section className='app-title-bar'>
+        <div className='app-title-bar__inner'>
+          <h1 className='app-title-bar__heading'>Our Offices</h1>
+          <p className='app-title-bar__sub'>Find your nearest AFH Wealth Management office across the UK.</p>
+        </div>
+      </section>
+      <main className='app-main' id='main'>
         <div className='app-main__inner'>
-          <div className='app-hero'>
-            <h1 className='app-hero__title'>Our Offices</h1>
-            <p className='app-hero__subtitle'>Find your nearest AFH Wealth Management office across the UK.</p>
-          </div>
           <LocationFeed />
         </div>
       </main>
