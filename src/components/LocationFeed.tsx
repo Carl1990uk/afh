@@ -1,4 +1,5 @@
 import { useLocations } from '../hooks/useLocations';
+import { LocationCard } from './LocationCard';
 import './LocationFeed.css';
 
 export function LocationFeed() {
@@ -11,7 +12,7 @@ export function LocationFeed() {
       <ul className='feed__grid' role='list'>
         {visible.map((loc, i) => (
           <li key={`${loc.name}-${i}`} role='listitem'>
-            <p>Location of {i + 1}</p>
+            <LocationCard location={loc} index={i} />
           </li>
         ))}
       </ul>

@@ -20,8 +20,10 @@ function App() {
           <LocationFeed />
         </div>
       </main>
-      <footer>
-        <p>&copy; {new Date().getFullYear()} AFH Wealth Management. All rights reserved.</p>
+      <footer className='app-footer'>
+        <div className='app-footer__inner'>
+          <p>&copy; {new Date().getFullYear()} AFH Wealth Management. All rights reserved.</p>
+        </div>
       </footer>
     </div>
   );

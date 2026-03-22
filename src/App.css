@@ -36,11 +36,11 @@
 .app-main__inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 48px 24px 64px;
+  padding: 32px 24px 32px;
 }
 
 .app-hero {
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 
 .app-hero__title {
@@ -57,4 +57,21 @@
   color: var(--color-text-muted);
   margin: 0;
   line-height: 1.6;
+}
+.app-footer {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: 20px 24px;
+}
+
+.app-footer__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.app-footer__inner p {
+  font-size: 0.825rem;
+  color: var(--color-text-subtle);
+  margin: 0;
 }

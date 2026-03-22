@@ -28,8 +28,8 @@
   align-items: center;
   gap: 8px;
   padding: 12px 28px;
-  background: var(--color-brand);
-  color: var(--color-surface);
+  background: #73dfab;
+  color: #1a1a1a;
   font-size: 0.9rem;
   font-weight: 600;
   border: none;
@@ -37,4 +37,9 @@
   cursor: pointer;
   transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
   letter-spacing: 0.02em;
+}
+.feed__load-more:hover {
+  background: #50c994;
+  box-shadow: 0 4px 16px rgba(115, 223, 171, 0.4);
+  transform: translateY(-1px);
 }

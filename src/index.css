@@ -11,14 +11,24 @@ body {
 
 :root {
   --sans: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --color-brand:       #1a3a6b;
-  --color-heading:     #0f1f3d;
-  --color-text-muted:  #6b7280;
-  --color-bg:          #f5f6f8;
+  --color-brand:       #6a005d;
+  --color-brand-light: #8b0079;
+  --color-brand-bg:    #f5e6f3;
+  --color-heading:     #4a4f54;
+  --color-text:        #646464;
+  --color-text-muted:  #7a7a7a;
+  --color-text-subtle: #a0a0a0;
+  --color-bg:          #f7f7f7;
   --color-surface:     #ffffff;
-  --color-border:      #e8eaed;
+  --color-border:      #e2e2e2;
+  --color-error:       #ef4444;
+  --color-error-text:  #b91c1c;
   font-family: var(--sans);
   font-size: 16px;
   line-height: 1.5;
   color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
