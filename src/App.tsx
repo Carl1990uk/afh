@@ -1,4 +1,5 @@
 import './App.css';
+import { LocationFeed } from './components/LocationFeed';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
             <h1 className='app-hero__title'>Our Offices</h1>
             <p className='app-hero__subtitle'>Find your nearest AFH Wealth Management office across the UK.</p>
           </div>
-          <p>List of offices</p>
+          <LocationFeed />
         </div>
       </main>
       <footer>
